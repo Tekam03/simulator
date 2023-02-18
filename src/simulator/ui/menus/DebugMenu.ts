@@ -1,7 +1,8 @@
 import * as PIXI from "pixi.js";
-import Camera from "../core/Camera";
-import Button from "./components/Button";
-import Switch from "./components/Switch";
+import Component from "../../components/Component";
+import Camera from "../../core/Camera";
+import Button from "../components/Button";
+import Switch from "../components/Switch";
 
 
 class DebugMenu extends PIXI.Graphics {
@@ -11,7 +12,8 @@ class DebugMenu extends PIXI.Graphics {
         this.active = true;
         this.x = 10;
         this.y = 10;
-        this.interactive = true;
+        // this.interactive = true;
+        this.eventMode = "static";
 
         this.openMenu();       
     }
@@ -26,22 +28,35 @@ class DebugMenu extends PIXI.Graphics {
         
         // draw background
         this.beginFill(0xffffff, 0.95);
+        this.lineStyle(2, 0x0, 1);
         this.drawRoundedRect(0, 0, 300, 500, 10);
         this.endFill();
 
         
         // Title
         const Title = new PIXI.Text('Debug Menu', {
-            fontSize: 30,
+            fontSize: 25,
             fontWeight: 'bold',
             fill: 0x000000,
             align: 'center',
         });
         Title.anchor.set(0.5);
-        Title.x = this.width/2;
+        Title.x = 120;
         Title.y = 20;
         this.addChild(Title);
 
+
+        // FPS
+        const FPSlabel = new PIXI.Text('FPS: ' + Math.round(PIXI.Ticker.shared.FPS), {
+            fontSize: 15,
+            fontWeight: 'bold',
+            fill: 0x000000,
+            align: 'center',
+        });
+        FPSlabel.anchor.set(0.5);
+        FPSlabel.x = 250;
+        FPSlabel.y = 20;
+        this.addChild(FPSlabel);
 
         // Camera
         const CameraHitBoxButton = new Switch(false, (status) => {
@@ -67,6 +82,37 @@ class DebugMenu extends PIXI.Graphics {
         CameraHitBoxLabel.x = this.width/2;
         CameraHitBoxLabel.y = 60;
         this.addChild(CameraHitBoxLabel);
+
+        // Hitboxes
+        const HitBoxButton = new Switch(false, (status) => {
+            
+            // get all components
+            this.parent.parent.getChildByName("movingCanvas").children?.map((child) => {
+                if (child instanceof Component) {
+                    if (status) {
+                        child.showHitbox();
+                    }
+                    else {
+                        child.removeHitbox();
+                    }
+                }
+            });
+        });
+        HitBoxButton.x = 10;
+        HitBoxButton.y = 100;
+        this.addChild(HitBoxButton);
+
+        const HitBoxLabel = new PIXI.Text('Show Hitboxes', {
+            fontSize: 15,
+            fontWeight: 'bold',
+            fill: 0x000000,
+            align: 'center',
+        });
+        HitBoxLabel.anchor.set(0.5);
+        HitBoxLabel.x = this.width/2;
+        HitBoxLabel.y = 100;
+        this.addChild(HitBoxLabel);
+
     }
 
     // not used anywhere

@@ -16,21 +16,17 @@ class Switch extends PIXI.Graphics {
         }
 
 
-        // black border
-        this.beginFill(0x000000, 1);
-        this.drawRoundedRect(-2, -2, 34, 34, 5);
-        this.endFill();
-
-
         // white foreground that changes color with tint
         this.beginFill(0xffffff, 1);
+        this.lineStyle(2, 0x0, 1);
         this.drawRoundedRect(0, 0, 30, 30, 5);
         this.endFill();
 
     
-        this.interactive = true;
+        // this.interactive = true;
+        this.eventMode = "static";
 
-        this.on("pointerdown", () => {
+        this.addEventListener("pointerdown", () => {
             this.status = !this.status;
             if (this.status) {
                 this.tint = 0x22ff22;

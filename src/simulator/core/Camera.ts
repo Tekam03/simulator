@@ -9,7 +9,8 @@ class Camera extends PIXI.Graphics {
     constructor(movingCanvas: PIXI.Container) {
         super();
         this.name = "Camera";
-        this.interactive = true;
+        // this.interactive = true;
+        this.eventMode = "static";
         this._hitboxsize = 10000;
         this.hitArea = new PIXI.Rectangle(
             -this._hitboxsize,
@@ -30,11 +31,8 @@ class Camera extends PIXI.Graphics {
             this._clicking = true;
         });
 
-        this.addEventListener("mouseup", (event) => {
-            this._clicking = false;
-        });
 
-        this.addEventListener("mousemove", (event) => {
+        this.addEventListener("globalmousemove", (event) => {
             if (this._clicking) {
                 // if (this.mouseIsInsideCanvas(event, app)) {
                     movingCanvas.y = event.global.y - this._previousPositionY
@@ -42,7 +40,20 @@ class Camera extends PIXI.Graphics {
                 // }
             }
         });
+        
+
+        
+        this.on('added', () => { //when added to MovingCanvas
+            this.parent.on('added', () => { // When added to Stage (ROOT)
+                this.parent.parent.addEventListener("mouseup", (event) => {
+                    this._clicking = false;
+                });
+            });
+            
+        });
     }
+
+
 
     drawHitbox() {
         this.beginFill(0xffffff, 0.5);
