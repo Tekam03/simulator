@@ -8,6 +8,7 @@ class Camera extends PIXI.Graphics {
     _previousPositionY: number;
     constructor(movingCanvas: PIXI.Container) {
         super();
+        this.name = "Camera";
         this.interactive = true;
         this._hitboxsize = 10000;
         this.hitArea = new PIXI.Rectangle(
@@ -16,14 +17,6 @@ class Camera extends PIXI.Graphics {
             this._hitboxsize * 2,
             this._hitboxsize * 2
         );
-
-
-        // DEBUG SHOW HITBOX FOR CAMERA CONTROL
-        // const test = new PIXI.Graphics
-        // test.beginFill(0xaaaaaa, 0.5)
-        // test.drawRect(-this._hitboxsize, -this._hitboxsize, this._hitboxsize * 2, this._hitboxsize * 2)
-        // test.endFill()
-        // this.addChild(test)
 
 
         this._clicking = false;
@@ -50,6 +43,18 @@ class Camera extends PIXI.Graphics {
             }
         });
     }
+
+    drawHitbox() {
+        this.beginFill(0xffffff, 0.5);
+        this.drawRect(-this._hitboxsize, -this._hitboxsize, this._hitboxsize * 2, this._hitboxsize * 2)
+        this.endFill();
+    }
+
+    removeHitbox() {
+        this.clear();
+    }
+
+
 
     // mouseIsInsideCanvas(
     //     event: PIXI.FederatedPointerEvent,

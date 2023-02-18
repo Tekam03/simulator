@@ -2,11 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import * as PIXI from "pixi.js";
 import Background from "./simulator/core/Background";
 import Camera from "./simulator/core/Camera";
+import DebugMenu from "./simulator/ui/DebugMenu";
 
 function App() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [app, setApp] = useState<PIXI.Application>();
-    const [player, setPlayer] = useState<PIXI.Sprite>();
 
     useEffect(() => {
         const width = window.innerWidth;
@@ -17,12 +17,13 @@ function App() {
                 width: width,
                 height: height,
                 backgroundColor: 0x505050,
-                antialias: true,
+                // antialias: true,
                 view: canvasRef.current,
             });
 
-			const movingCanvas = new PIXI.Container();
 
+			// Everything that moves with the camera should be in this container
+			const movingCanvas = new PIXI.Container();
 
             const background = new Background(10000);
             movingCanvas.addChild(background);
@@ -32,15 +33,22 @@ function App() {
 
 			app.stage.addChild(movingCanvas);
 
+			// Everything that doesn't move with the camera should be in this container (UI)
+			const fixedCanvas = new PIXI.Container();
 
-            const player = PIXI.Sprite.from(
-                "https://pixijs.io/examples/examples/assets/bunny.png"
-            );
-            player.anchor.set(0.5);
-            player.x = app.screen.width / 2;
-            player.y = app.screen.height / 2;
-			app.stage.addChild(player);
-            setPlayer(player);
+			const debugMenu = new DebugMenu();
+			fixedCanvas.addChild(debugMenu);
+			// testing purposes
+			// const player = PIXI.Sprite.from("https://pixijs.io/examples/examples/assets/bunny.png");
+            // player.anchor.set(0.5);
+            // player.x = app.screen.width / 2;
+            // player.y = app.screen.height / 2;
+			// fixedCanvas.addChild(player);
+
+			app.stage.addChild(fixedCanvas);
+
+
+            
 
             setApp(app);
             // app.stage.x = 500;			
