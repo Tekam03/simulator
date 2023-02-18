@@ -2,9 +2,9 @@ import * as PIXI from "pixi.js";
 
 class Component extends PIXI.Container {
 
-    _hitbox: PIXI.Rectangle;
+    _hitbox: PIXI.IHitArea;
     _hitboxGraphic: PIXI.Graphics;
-    constructor(hitbox: PIXI.Rectangle) {
+    constructor(hitbox: PIXI.IHitArea) {
         super();
         this._hitbox = hitbox;
         this._hitboxGraphic = new PIXI.Graphics();
@@ -24,7 +24,11 @@ class Component extends PIXI.Container {
 
     showHitbox() {
         this._hitboxGraphic.beginFill(0xff0000, 0.5);
-        this._hitboxGraphic.drawRect(this._hitbox.x, this._hitbox.y, this._hitbox.width, this._hitbox.height);
+        if(this._hitbox instanceof PIXI.Rectangle) {
+            this._hitboxGraphic.drawRect(this._hitbox.x, this._hitbox.y, this._hitbox.width, this._hitbox.height);
+        } else if(this._hitbox instanceof PIXI.Circle) {
+            this._hitboxGraphic.drawCircle(this._hitbox.x, this._hitbox.y, this._hitbox.radius);
+        }
         this._hitboxGraphic.endFill();
     }
 

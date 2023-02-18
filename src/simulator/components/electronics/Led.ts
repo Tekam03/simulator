@@ -11,8 +11,8 @@ class Led extends Component {
     sprite: PIXI.Sprite;
 
     constructor(defaultStatus: boolean = false) {
-        const hitboxSize = 120;
-        const hitbox = new PIXI.Rectangle(-hitboxSize/2, -hitboxSize/2, hitboxSize, hitboxSize);
+        const hitboxSize = 60;
+        const hitbox = new PIXI.Circle(0, 0, hitboxSize);
         super(hitbox);
         
 
