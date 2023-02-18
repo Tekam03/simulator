@@ -9,11 +9,14 @@ class Background extends PIXI.Container {
 	gridSize: number; // grid size in number of pixels between lines
 	bigLines: number; // amount of pixels between bigger lines
 
-    constructor(width: number, height:number) {
+    constructor(size: number) {
         super();
 
-        this.width = width;
-        this.height = height;
+        this.x=-size/2;
+        this.y=-size/2;
+        this.width = size;
+        this.height = size;
+            
 
         this.gridSize = 100;
         this.bigLines = this.gridSize * 5;
@@ -22,37 +25,34 @@ class Background extends PIXI.Container {
         this.lines.lineStyle(2, 0xaaaaaa, 1);
 
         // draw horizontal lines
-        for (let i = 0; i <= height; i += this.gridSize) {
+        for (let i = 0; i <= size; i += this.gridSize) {
             this.lines.moveTo(0, i);
-            this.lines.lineTo(width, i);
+            this.lines.lineTo(size, i);
         }
 
         // draw vertical lines
-        for (let i = 0; i <= width; i += this.gridSize) {
+        for (let i = 0; i <= size; i += this.gridSize) {
             this.lines.moveTo(i, 0);
-            this.lines.lineTo(i, height);
+            this.lines.lineTo(i, size);
         }
 
         this.lines.lineStyle(5, 0xaaaaaa, 1); // big lines
         // draw big horizontal lines
-        for (let i = 0; i <= height; i += this.bigLines) {
+        for (let i = 0; i <= size; i += this.bigLines) {
             this.lines.moveTo(0, i);
-            this.lines.lineTo(width, i);
+            this.lines.lineTo(size, i);
         }
 
         // draw big vertical lines
-        for (let i = 0; i <= width; i += this.bigLines) {
+        for (let i = 0; i <= size; i += this.bigLines) {
             this.lines.moveTo(i, 0);
-            this.lines.lineTo(i, height);
+            this.lines.lineTo(i, size);
         }
 
 
         this.addChild(this.lines);
+
     }
-
-
-
-
 }
 
 export default Background;
