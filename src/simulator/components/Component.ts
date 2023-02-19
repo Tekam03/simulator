@@ -6,33 +6,35 @@ class Component extends PIXI.Container {
     _hitboxGraphic: PIXI.Graphics;
     constructor(hitbox: PIXI.IHitArea) {
         super();
-        this._hitbox = hitbox;
-        this._hitboxGraphic = new PIXI.Graphics();
+        this._hitbox = hitbox;  // actual hitbox (invisible to the eye with event listeners)
+        this._hitboxGraphic = new PIXI.Graphics(); // hitbox graphic (visible to the eye for debugging)
         this._hitboxGraphic.zIndex = 1000;
 
-        this.eventMode = "static";
+        // this.eventMode = "static";
+        this.interactive = true;
         this.sortableChildren = true;
         this.hitArea = this._hitbox;
         
         this.addChild(this._hitboxGraphic);
 
 
-        this.addEventListener("pointerdown", () => {
+        this.addEventListener("pointerdown", (e) => {
+            e.stopPropagation();
             console.log("pointerdown");
         });
     }
 
     showHitbox() {
         this._hitboxGraphic.beginFill(0xff0000, 0.5);
-        if(this._hitbox instanceof PIXI.Rectangle) {
+        if(this._hitbox instanceof PIXI.Rectangle) { // if hitbox is a rectangle type
             this._hitboxGraphic.drawRect(this._hitbox.x, this._hitbox.y, this._hitbox.width, this._hitbox.height);
-        } else if(this._hitbox instanceof PIXI.Circle) {
+        } else if(this._hitbox instanceof PIXI.Circle) { // if hitbox is a circle type
             this._hitboxGraphic.drawCircle(this._hitbox.x, this._hitbox.y, this._hitbox.radius);
         }
         this._hitboxGraphic.endFill();
     }
 
-    removeHitbox() {
+    hideHitbox() {
         this._hitboxGraphic.clear();
     }
 

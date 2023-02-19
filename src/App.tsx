@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
+
 import * as PIXI from "pixi.js";
+import { Viewport } from 'pixi-viewport'
+
 import Background from "./simulator/core/Background";
-import Camera from "./simulator/core/Camera";
 import DebugMenu from "./simulator/ui/menus/DebugMenu";
 
 import Component from "./simulator/components/Component";
@@ -20,24 +22,38 @@ function App() {
                 width: width,
                 height: height,
                 backgroundColor: 0x505050,
-                // antialias: true,
+                antialias: true,
                 view: canvasRef.current,
             });
-			app.stage.eventMode = "static";
+            app.stage.interactive = true;
 
+			// app.stage.eventMode = "static";
 
-			// Everything that moves with the camera should be in this container
-			const movingCanvas = new PIXI.Container();
+            // create viewport
+            const movingCanvas = new Viewport({
+                screenWidth: window.innerWidth,
+                screenHeight: window.innerHeight,
+                worldWidth: 1000,
+                worldHeight: 1000,
+
+                events: app.renderer.events,
+            })
 			movingCanvas.name = "movingCanvas";
-			movingCanvas.eventMode = "static";
+            movingCanvas.interactive = true;
+
+            // add the viewport to the stage
+            movingCanvas.addChild(movingCanvas)
+
+            // activate plugins
+            movingCanvas
+            .drag()
+            .pinch()
+            .wheel()
+            .decelerate()
+            
 
             const background = new Background(10000);
             movingCanvas.addChild(background);
-
-			const camera = new Camera(movingCanvas);
-			movingCanvas.addChild(camera);
-
-
 
 
 			const leds: Led[] = [];
@@ -62,13 +78,6 @@ function App() {
 
 			const debugMenu = new DebugMenu();
 			fixedCanvas.addChild(debugMenu);
-			// testing purposes
-			// const player = PIXI.Sprite.from("https://pixijs.io/examples/examples/assets/bunny.png");
-            // player.anchor.set(0.5);
-            // player.x = app.screen.width / 2;
-            // player.y = app.screen.height / 2;
-			// fixedCanvas.addChild(player);
-
 			app.stage.addChild(fixedCanvas);
 
 

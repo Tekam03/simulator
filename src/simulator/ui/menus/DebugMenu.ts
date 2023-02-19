@@ -12,8 +12,8 @@ class DebugMenu extends PIXI.Graphics {
         this.active = true;
         this.x = 10;
         this.y = 10;
-        // this.interactive = true;
-        this.eventMode = "static";
+        this.interactive = true;
+        // this.eventMode = "static";
 
         this.openMenu();       
     }
@@ -58,48 +58,25 @@ class DebugMenu extends PIXI.Graphics {
         FPSlabel.y = 20;
         this.addChild(FPSlabel);
 
-        // Camera
-        const CameraHitBoxButton = new Switch(false, (status) => {
-            const camera = this.parent.parent.getChildByName('Camera', true) as Camera
-            if (status) {
-                camera.drawHitbox();
-            }
-            else {
-                camera.removeHitbox();
-            }
-        });
-        CameraHitBoxButton.x = 10;
-        CameraHitBoxButton.y = 60;
-        this.addChild(CameraHitBoxButton);
-
-        const CameraHitBoxLabel = new PIXI.Text('Show Camera Hitbox', {
-            fontSize: 15,
-            fontWeight: 'bold',
-            fill: 0x000000,
-            align: 'center',
-        });
-        CameraHitBoxLabel.anchor.set(0.5);
-        CameraHitBoxLabel.x = this.width/2;
-        CameraHitBoxLabel.y = 60;
-        this.addChild(CameraHitBoxLabel);
+    
 
         // Hitboxes
         const HitBoxButton = new Switch(false, (status) => {
             
             // get all components
-            this.parent.parent.getChildByName("movingCanvas").children?.map((child) => {
+            this.parent.parent.getChildByName("movingCanvas", true).children?.map((child) => {
                 if (child instanceof Component) {
                     if (status) {
                         child.showHitbox();
                     }
                     else {
-                        child.removeHitbox();
+                        child.hideHitbox();
                     }
                 }
             });
         });
         HitBoxButton.x = 10;
-        HitBoxButton.y = 100;
+        HitBoxButton.y = 60;
         this.addChild(HitBoxButton);
 
         const HitBoxLabel = new PIXI.Text('Show Hitboxes', {
@@ -110,7 +87,7 @@ class DebugMenu extends PIXI.Graphics {
         });
         HitBoxLabel.anchor.set(0.5);
         HitBoxLabel.x = this.width/2;
-        HitBoxLabel.y = 100;
+        HitBoxLabel.y = 70;
         this.addChild(HitBoxLabel);
 
     }

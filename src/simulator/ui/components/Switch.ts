@@ -23,10 +23,11 @@ class Switch extends PIXI.Graphics {
         this.endFill();
 
     
-        // this.interactive = true;
-        this.eventMode = "static";
+        this.interactive = true;
+        // this.eventMode = "static";
 
-        this.addEventListener("pointerdown", () => {
+
+        this.on("pointerdown", () => {
             this.status = !this.status;
             if (this.status) {
                 this.tint = 0x22ff22;
