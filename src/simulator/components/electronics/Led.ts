@@ -25,7 +25,12 @@ class Led extends Component {
         this._status = defaultStatus;
         this.status = defaultStatus;
 
+        this.addEventListener("pointerdown", (e) => {
+            this.toggle();
+        });
+
     }
+    
     
 
     public get status() {

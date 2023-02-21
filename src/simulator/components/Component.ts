@@ -30,6 +30,8 @@ class Component extends PIXI.Container {
             this._hitboxGraphic.drawRect(this._hitbox.x, this._hitbox.y, this._hitbox.width, this._hitbox.height);
         } else if(this._hitbox instanceof PIXI.Circle) { // if hitbox is a circle type
             this._hitboxGraphic.drawCircle(this._hitbox.x, this._hitbox.y, this._hitbox.radius);
+        } else if(this._hitbox instanceof PIXI.Polygon) { // if hitbox is a circle type
+            this._hitboxGraphic.drawPolygon(this._hitbox.points);
         }
         this._hitboxGraphic.endFill();
     }
