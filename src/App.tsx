@@ -25,7 +25,7 @@ function App() {
                 antialias: true,
                 view: canvasRef.current,
             });
-            app.stage.interactive = true;
+            // app.stage.interactive = true;
 
 			// app.stage.eventMode = "static";
 
@@ -41,18 +41,51 @@ function App() {
 			movingCanvas.name = "movingCanvas";
             movingCanvas.interactive = true;
 
+            const background = new Background(10000);
+
+
+            // Everything that doesn't move with the camera should be in this container (UI)
+			const fixedCanvas = new PIXI.Container();
+
+			const debugMenu = new DebugMenu();
+
             // add the viewport to the stage
-            movingCanvas.addChild(movingCanvas)
+            // movingCanvas.addChild(movingCanvas)
 
             // activate plugins
             movingCanvas
             .drag()
             .pinch()
             .wheel()
-            .decelerate()
+            .decelerate({
+                friction: 0.85,
+            })
+
+            // when starting to drag, ignore all other interactions
+            movingCanvas.on("drag-start", (e) => {
+                movingCanvas.children.forEach((child) => {
+                    if (child instanceof Component) {
+                        child.interactive = false;
+                    }
+                });
+
+                debugMenu.interactive = false;
+            });     
+            
+            // when done dragging, re-enable all interactions
+            movingCanvas.on("drag-end", (e) => {
+                movingCanvas.children.forEach((child) => {
+                    if (child instanceof Component) {
+                        child.interactive = true;
+                    }
+                });
+
+                debugMenu.interactive = true;
+            });
+
             
 
-            const background = new Background(10000);
+            
             movingCanvas.addChild(background);
 
 
@@ -67,16 +100,11 @@ function App() {
 				movingCanvas.addChild(led);
 			}
 
+
+
+
 			app.stage.addChild(movingCanvas);
 
-
-
-
-
-			// Everything that doesn't move with the camera should be in this container (UI)
-			const fixedCanvas = new PIXI.Container();
-
-			const debugMenu = new DebugMenu();
 			fixedCanvas.addChild(debugMenu);
 			app.stage.addChild(fixedCanvas);
 
