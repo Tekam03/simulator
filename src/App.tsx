@@ -8,10 +8,13 @@ import DebugMenu from "./simulator/ui/menus/DebugMenu";
 
 import Component from "./simulator/components/Component";
 import Led from "./simulator/components/electronics/Led";
+import Battery from "./simulator/components/electronics/Battery";
+import Switch from "./simulator/components/electronics/Switch";
 
 function App() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [app, setApp] = useState<PIXI.Application>();
+    const [currentlyEditing, setCurrentlyEditing] = useState<Component | null>(null);
 
     useEffect(() => {
         const width = window.innerWidth;
@@ -74,9 +77,15 @@ function App() {
             
             // when done dragging, re-enable all interactions
             movingCanvas.on("drag-end", (e) => {
+
                 movingCanvas.children.forEach((child) => {
                     if (child instanceof Component) {
                         child.interactive = true;
+
+                        // debug
+                        if (child instanceof Led) {
+                            // child.pinMinus
+                        }
                     }
                 });
 
@@ -88,17 +97,34 @@ function App() {
             
             movingCanvas.addChild(background);
 
+            
+
+
+
 
 			const leds: Led[] = [];
 			for (let i = 0; i < 10; i++) {
 				const led = new Led();
-				led.x = Math.random() * 500
-				led.y = Math.random() * 500
+				led.x = i * 200 + 700;
+                led.y = 150;
+
+				// led.y = i * 50
 				// random between 0 and 1
 				led.status = Math.random() > 0.5 ? true : false;
 				leds.push(led);
 				movingCanvas.addChild(led);
 			}
+
+
+            const swtch = new Switch();
+            swtch.x = 500;
+            swtch.y = 500;
+            movingCanvas.addChild(swtch);
+
+            const battery = new Battery();
+            battery.x = 500;
+            battery.y = 300;
+            movingCanvas.addChild(battery);
 
 
 

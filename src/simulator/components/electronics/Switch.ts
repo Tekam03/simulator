@@ -7,10 +7,9 @@ import ledOff from "../../assets/images/ledOff.png";
 
 // led off http://www.clker.com/cliparts/M/h/R/9/8/H/red-led-on-hi.png
 // led on http://www.clker.com/cliparts/z/r/p/I/x/a/green-led-on-hi.png
-class Led extends Component {
+class Switch extends Component {
     _status: boolean;
     sprite: PIXI.Sprite;
-    pinMinus: Pin;
     pinPlus: Pin;
 
     constructor(defaultStatus: boolean = false) {
@@ -31,13 +30,10 @@ class Led extends Component {
         this.status = defaultStatus;
 
         this.pinPlus = new Pin();
-        this.pinPlus.position.set(-60, 0);  
+        this.pinPlus.position.set(60, 0);  
         
-        this.pinMinus = new Pin();
-        this.pinMinus.position.set(60, 0);
 
         this.addChild(this.pinPlus);
-        this.addChild(this.pinMinus);
 
         this.addEventListener("click", (e) => {
             this.toggle();
@@ -55,14 +51,7 @@ class Led extends Component {
 
     // false : normal, true : connecting
     setPinMode(newMode: boolean) {
-        if (newMode) {
-            this.pinPlus.connectingMode = true;
-            this.pinMinus.connectingMode = true;
-        }
-        else {
-            this.pinPlus.connectingMode = false;
-            this.pinMinus.connectingMode = false;
-        }
+        this.pinPlus.connectingMode = newMode;
     }
 
     public get status() {
@@ -70,6 +59,18 @@ class Led extends Component {
     }
     public set status(newStatus: boolean) {
         
+        if (this.parent) {
+            this.parent.children.forEach((component) => {
+                if (component instanceof Component) {
+                    component.children.forEach((child) => {
+                        if(child instanceof Pin) {
+                            child.status = false;
+                        }
+                    });
+                }
+            });
+        }
+
         // console.log("turning led " + newStatus)
         if (newStatus) {
             this.sprite.texture = PIXI.Texture.from(ledOn);
@@ -78,16 +79,14 @@ class Led extends Component {
             this.sprite.texture = PIXI.Texture.from(ledOff);
         }
         this._status = newStatus;
+        if (this.pinPlus) {
+            this.pinPlus.status = newStatus;
+        }
+
     }
 
     calculate() {
         // console.log("led calculate");
-        this.status = false;
-        // if (this.pinPlus.connectedWire) {
-        //     if (this.pinPlus.connectedWire.status) {
-        //         this.status = true;
-        //     }
-        // }
     }
 
     public turnOff() {
@@ -104,4 +103,4 @@ class Led extends Component {
 }
     
 
-export default Led;
+export default Switch;
