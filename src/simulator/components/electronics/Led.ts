@@ -82,7 +82,8 @@ class Led extends Component {
 
     calculate() {
         // console.log("led calculate");
-        this.status = false;
+        this.status = this.pinPlus.status;
+        this.pinMinus.status = this.pinPlus.status;
         // if (this.pinPlus.connectedWire) {
         //     if (this.pinPlus.connectedWire.status) {
         //         this.status = true;

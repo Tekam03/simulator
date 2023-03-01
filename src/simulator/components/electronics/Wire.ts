@@ -131,24 +131,43 @@ class Wire extends PIXI.Graphics {
         return this._status;
     }
     public set status(newStatus: boolean) {
+        // if (this.pin2) {
+        //     this.status = this.pin2.status || this.pin1.status;
+        //     this.pin1.status = this.status;
+        //     this.pin2.status = this.status;
+        // }
+        //  ? this.tint = 0x000000 : this.tint = 0xff0000;
         if (newStatus) {
             this.tint = 0xff0000;
+            
         }
         else {
             this.tint = 0x000000;
         }
         
-        console.log("turning wire " + newStatus)
+        // console.log("turning wire " + newStatus)
 
 
         this._status = newStatus;
     }
 
-    calculate() {
+    calculate(currentPin: Pin) {
+        // console.log("quelque chose d'autre")
         if (this.pin2) {
-            this.status = this.pin2.status || this.pin1.status;
-            this.pin1.status = this.status;
-            this.pin2.status = this.status;
+            this.status = currentPin.status;
+            
+            if (currentPin === this.pin1) {
+                this.pin2.status = this.status;
+
+                if(this.pin2.parent instanceof Component) {
+                    this.pin2.parent.calculate();
+                }
+            } else {
+                this.pin1.status = this.status;
+                if(this.pin1.parent instanceof Component) {
+                    this.pin1.parent.calculate();
+                }
+            }
         }
     }
 }

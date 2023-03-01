@@ -59,17 +59,17 @@ class Switch extends Component {
     }
     public set status(newStatus: boolean) {
         
-        if (this.parent) {
-            this.parent.children.forEach((component) => {
-                if (component instanceof Component) {
-                    component.children.forEach((child) => {
-                        if(child instanceof Pin) {
-                            child.status = false;
-                        }
-                    });
-                }
-            });
-        }
+        // if (this.parent) {
+        //     this.parent.children.forEach((component) => {
+        //         if (component instanceof Component) {
+        //             component.children.forEach((child) => {
+        //                 if(child instanceof Pin) {
+        //                     child.status = false;
+        //                 }
+        //             });
+        //         }
+        //     });
+        // }
 
         // console.log("turning led " + newStatus)
         if (newStatus) {
@@ -86,6 +86,7 @@ class Switch extends Component {
     }
 
     calculate() {
+        // this.pinPlus.status 
         // console.log("led calculate");
     }
 

@@ -65,6 +65,8 @@ class Pin extends PIXI.Graphics {
                         child.pin2 = this;
                         child.editing = false;
                         
+                        // set status of the new wire
+                        child.calculate(child.pin1);
                         this.connectedWire = child;
 
 
@@ -84,6 +86,10 @@ class Pin extends PIXI.Graphics {
 
                 // create a new wire and link it to this pin
                 this.connectedWire = new Wire(this);
+                this.status = false
+                if (this.parent instanceof Component) {
+                    this.parent.calculate();
+                }
                 
                 this.parent.parent.addChild(this.connectedWire); // add wire to moving canvas
             }         
@@ -125,10 +131,10 @@ class Pin extends PIXI.Graphics {
         if (newStatus == this._status) return;
         this._status = newStatus;
         
-        console.log("turning pin " + newStatus)
+        // console.log("turning pin " + newStatus)
         if (this.connectedWire) {
             // this.connectedWire.status = newStatus;
-            this.connectedWire.calculate();
+            this.connectedWire.calculate(this);
         }
 
         // if (this.parent) {

@@ -10,6 +10,7 @@ import Component from "./simulator/components/Component";
 import Led from "./simulator/components/electronics/Led";
 import Battery from "./simulator/components/electronics/Battery";
 import Switch from "./simulator/components/electronics/Switch";
+import Arduino from "./simulator/components/electronics/Arduino";
 
 function App() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -110,7 +111,7 @@ function App() {
 
 				// led.y = i * 50
 				// random between 0 and 1
-				led.status = Math.random() > 0.5 ? true : false;
+				// led.status = Math.random() > 0.5 ? true : false;
 				leds.push(led);
 				movingCanvas.addChild(led);
 			}
@@ -125,6 +126,11 @@ function App() {
             battery.x = 500;
             battery.y = 300;
             movingCanvas.addChild(battery);
+
+            const arduino = new Arduino();
+            arduino.x = 1500;
+            arduino.y = 700;
+            movingCanvas.addChild(arduino);
 
 
 
